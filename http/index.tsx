@@ -5,6 +5,8 @@ import superagent from "superagent"
 import { Card } from "@blueprintjs/core"
 
 interface State {
+	money: number
+
 	term: string
 	dates: string[]
 	costs: number[]
@@ -15,6 +17,8 @@ export default class Index extends React.Component<any, State> {
 		super(props)
 
 		this.state = {
+			money: 100,
+
 			term: "",
 			dates: [],
 			costs: [],
@@ -37,10 +41,18 @@ export default class Index extends React.Component<any, State> {
 		this.update()
 	}
 
+	calculateNetWorth() {
+		// TODO: include value of assets
+		return this.state.money.toFixed(2)
+	}
+
 	render() {
 		return (
 			<React.Fragment>
 				<Card id="sidebar" elevation={3}>
+					Money: ${this.state.money.toFixed(2)}
+					<br />
+					Net worth: ${this.calculateNetWorth()}
 				</Card>
 				<div id="main-view">
 					<div style={{
