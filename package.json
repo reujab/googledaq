@@ -1,0 +1,33 @@
+{
+  "name": "googledaq",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "parcel watch -d dist http/index.html",
+    "build": "parcel build -d dist http/index.html"
+  },
+  "author": "reujab",
+  "license": "Unlicense",
+  "dependencies": {
+    "@blueprintjs/core": "^3.14.1",
+    "chart.js": "^2.8.0",
+    "express": "^4.16.4",
+    "google-trends-api": "^4.9.0",
+    "react": "^16.8.4",
+    "react-chartjs-2": "^2.7.4",
+    "react-dom": "^16.8.4",
+    "superagent": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/chart.js": "^2.7.48",
+    "@types/express": "^4.16.1",
+    "@types/node": "^11.11.3",
+    "@types/react": "^16.8.8",
+    "@types/react-dom": "^16.8.2",
+    "@types/superagent": "^4.1.1",
+    "parcel-bundler": "^1.12.2",
+    "typescript": "^3.3.3333"
+  }
+}
