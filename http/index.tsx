@@ -7,9 +7,13 @@ import { Card } from "@blueprintjs/core"
 interface State {
 	money: number
 
-	portfolio: string[]
+	selectedStock: null | Stock
 
-	term: string
+	portfolio: Stock[]
+}
+
+export interface Stock {
+	name: string
 	dates: string[]
 	costs: number[]
 }
@@ -21,21 +25,17 @@ export default class Index extends React.Component<any, State> {
 		this.state = {
 			money: 100,
 
-			portfolio: ["Google", "Facebook"],
+			selectedStock: null,
 
-			term: "",
-			dates: [],
-			costs: [],
+			portfolio: [],
 		}
 	}
 
-	async update(term) {
+	async updateGraph(term) {
 		if (term) {
 			// Sets dates and costs
-			this.setState((await superagent.get("/graph.json").query({ term })).body)
+			this.setState({ selectedStock: (await superagent.get("/graph.json").query({ term })).body })
 		}
-
-		this.setState({ term })
 	}
 
 	calculateNetWorth() {
@@ -54,12 +54,12 @@ export default class Index extends React.Component<any, State> {
 					<div id="portfolio">
 						{this.state.portfolio.map((term) => (
 							<Card
-								key={term}
+								key={term.name}
 								interactive
 								elevation={1}
-								onClick={() => this.update(term)}
+								onClick={() => this.updateGraph(term.name)}
 							>
-								{term}
+								{term.name}
 							</Card>
 						))}
 					</div>
@@ -69,7 +69,7 @@ export default class Index extends React.Component<any, State> {
 						width: "80%",
 						margin: "auto",
 					}}>
-						<Graph term={this.state.term} dates={this.state.dates} costs={this.state.costs} />
+						<Graph stock={this.state.selectedStock} />
 					</div>
 				</div>
 			</React.Fragment>
