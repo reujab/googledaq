@@ -7,6 +7,8 @@ import { Card } from "@blueprintjs/core"
 interface State {
 	money: number
 
+	portfolio: string[]
+
 	term: string
 	dates: string[]
 	costs: number[]
@@ -19,26 +21,21 @@ export default class Index extends React.Component<any, State> {
 		this.state = {
 			money: 100,
 
+			portfolio: ["Google", "Facebook"],
+
 			term: "",
 			dates: [],
 			costs: [],
 		}
 	}
 
-	async update() {
-		const term = decodeURIComponent(location.hash.slice(1))
-		this.setState({ term })
-		if (!term) {
-			return
+	async update(term) {
+		if (term) {
+			// Sets dates and costs
+			this.setState((await superagent.get("/graph.json").query({ term })).body)
 		}
 
-		// Sets dates and costs
-		this.setState((await superagent.get("/graph.json").query({ term })).body)
-	}
-
-	componentDidMount() {
-		addEventListener("hashchange", this.update.bind(this))
-		this.update()
+		this.setState({ term })
 	}
 
 	calculateNetWorth() {
@@ -53,6 +50,19 @@ export default class Index extends React.Component<any, State> {
 					Money: ${this.state.money.toFixed(2)}
 					<br />
 					Net worth: ${this.calculateNetWorth()}
+
+					<div id="portfolio">
+						{this.state.portfolio.map((term) => (
+							<Card
+								key={term}
+								interactive
+								elevation={1}
+								onClick={() => this.update(term)}
+							>
+								{term}
+							</Card>
+						))}
+					</div>
 				</Card>
 				<div id="main-view">
 					<div style={{
