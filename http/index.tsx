@@ -1,7 +1,7 @@
 import * as React from "react"
+import Graph from "./Graph"
 import ReactDOM from "react-dom"
 import superagent from "superagent"
-import { Line } from "react-chartjs-2"
 
 interface State {
 	term: string
@@ -38,17 +38,7 @@ export default class Index extends React.Component<any, State> {
 
 	render() {
 		return (
-			<div>
-				<Line data={{
-					labels: this.state.dates,
-					datasets: [{
-						backgroundColor: "rgb(66, 133, 244)",
-						label: this.state.term,
-						data: this.state.costs,
-						lineTension: 0.25,
-					}],
-				}} />
-			</div>
+			<Graph term={this.state.term} dates={this.state.dates} costs={this.state.costs} />
 		)
 	}
 }
