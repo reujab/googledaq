@@ -55,6 +55,7 @@ exports.getGraph = async function getGraph(term) {
 		name: term,
 		dates: data.map((frame) => moment(frame.date).utc().format("ddd MMM D")),
 		costs: data.map((frame) => frame.cost),
+		currentCost: _.last(data).cost,
 	}
 }
 

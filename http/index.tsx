@@ -1,6 +1,7 @@
 import * as React from "react"
 import Graph from "./Graph"
 import ReactDOM from "react-dom"
+import Search from "./Search"
 import superagent from "superagent"
 import { Card } from "@blueprintjs/core"
 
@@ -16,6 +17,7 @@ export interface Stock {
 	name: string
 	dates: string[]
 	costs: number[]
+	currentCost: number
 }
 
 export default class Index extends React.Component<any, State> {
@@ -32,6 +34,8 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	async updateGraph(term) {
+		this.setState({ selectedStock: null })
+
 		if (term) {
 			// Sets dates and costs
 			this.setState({ selectedStock: (await superagent.get("/graph.json").query({ term })).body })
@@ -52,6 +56,7 @@ export default class Index extends React.Component<any, State> {
 					Net worth: ${this.calculateNetWorth()}
 
 					<div id="portfolio">
+						<Search money={this.state.money} stock={this.state.selectedStock} onSearch={(term) => this.updateGraph(term)} />
 						{this.state.portfolio.map((term) => (
 							<Card
 								key={term.name}
