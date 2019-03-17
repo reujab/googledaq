@@ -2,6 +2,7 @@ import * as React from "react"
 import Graph from "./Graph"
 import ReactDOM from "react-dom"
 import superagent from "superagent"
+import { Card } from "@blueprintjs/core"
 
 interface State {
 	term: string
@@ -38,7 +39,18 @@ export default class Index extends React.Component<any, State> {
 
 	render() {
 		return (
-			<Graph term={this.state.term} dates={this.state.dates} costs={this.state.costs} />
+			<React.Fragment>
+				<Card id="sidebar" elevation={3}>
+				</Card>
+				<div id="main-view">
+					<div style={{
+						width: "80%",
+						margin: "auto",
+					}}>
+						<Graph term={this.state.term} dates={this.state.dates} costs={this.state.costs} />
+					</div>
+				</div>
+			</React.Fragment>
 		)
 	}
 }
