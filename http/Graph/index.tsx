@@ -18,6 +18,11 @@ export default class Graph extends React.Component<Props> {
 					data: this.props.costs,
 					lineTension: 0.25,
 				}],
+			}} options={{
+				// The animation seems to be a bit glitched.
+				animation: {
+					duration: 0,
+				},
 			}} />
 		)
 	}
