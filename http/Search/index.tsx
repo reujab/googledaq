@@ -15,7 +15,7 @@ interface State {
 	open: boolean
 	loading: boolean
 
-	stocks: number
+	shares: number
 }
 
 export default class Search extends React.Component<Props, State> {
@@ -26,12 +26,12 @@ export default class Search extends React.Component<Props, State> {
 			open: false,
 			loading: false,
 
-			stocks: 0
+			shares: 0
 		}
 	}
 
 	getPrice() {
-		return Number((this.state.stocks * this.props.stock.currentCost).toFixed(2))
+		return Number((this.state.shares * this.props.stock.currentCost).toFixed(2))
 	}
 
 	render() {
@@ -67,7 +67,7 @@ export default class Search extends React.Component<Props, State> {
 					<Collapse in={!!this.props.stock}>
 						{this.props.stock && (
 							<div>
-								Stock price: ${this.props.stock.currentCost.toFixed(2)}
+								Share price: ${this.props.stock.currentCost.toFixed(2)}
 
 								<div style={{
 									display: "flex",
@@ -80,21 +80,21 @@ export default class Search extends React.Component<Props, State> {
 											min={0}
 											minorStepSize={null}
 											max={Math.floor(this.props.money / this.props.stock.currentCost)}
-											onValueChange={(stocks) => this.setState({ stocks: stocks || 0 })}
-											value={this.state.stocks}
+											onValueChange={(shares) => this.setState({ shares: shares || 0 })}
+											value={this.state.shares}
 										/>
 									</div>
 									<Button
 										style={{ flex: "auto 0", marginLeft: 5 }}
-										disabled={!this.state.stocks}
+										disabled={!this.state.shares}
 									>
 										Buy
 									</Button>
 								</div>
 
-								<Collapse in={this.state.stocks > 0}>
+								<Collapse in={this.state.shares > 0}>
 									<Callout style={{ marginBottom: 10 }} icon="info-sign" intent="primary">
-										Buying {this.state.stocks} stock{this.state.stocks === 1 ? "" : "s"} will cost ${this.getPrice().toFixed(2)}, which is {(100 * this.getPrice() / this.props.money).toFixed(1)}% of your total money.
+										Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost ${this.getPrice().toFixed(2)}, which is {(100 * this.getPrice() / this.props.money).toFixed(1)}% of your total money.
 									</Callout>
 								</Collapse>
 							</div>
@@ -111,7 +111,7 @@ export default class Search extends React.Component<Props, State> {
 								open: false,
 								loading: false,
 
-								stocks: 0,
+								shares: 0,
 							})
 						}}
 					>
