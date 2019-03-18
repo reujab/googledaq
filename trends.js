@@ -38,12 +38,12 @@ exports.getGraph = async function getGraph(term) {
 		data.push({
 			date: nextDay[0].date,
 			// Averages cost
-			cost: parseFloat((_.sumBy(nextDay, "cost") / nextDay.length).toFixed(2)),
+			cost: Math.round(_.sumBy(nextDay, "cost") / nextDay.length),
 		})
 	}
 
 	// Includes the average of today's incomplete data only if it's greater than yesterday's
-	const averageToday = parseFloat((_.sumBy(granularData, "cost") / granularData.length).toFixed(2))
+	const averageToday = Math.round(_.sumBy(granularData, "cost") / granularData.length)
 	if (averageToday >= _.last(data).cost) {
 		data.push({
 			date: granularData[0].date,
@@ -63,6 +63,6 @@ function fixFrame(frame) {
 	return {
 		date: new Date(1000 * Number(frame.time)),
 		// If cost for a term is less than 50 cents, make it 50 cents
-		cost: Math.max(parseFloat((100 * frame.value[1] / frame.value[0]).toFixed(2)), 0.5),
+		cost: Math.max(Math.round(100 * 100 * frame.value[1] / frame.value[0]), 50),
 	}
 }

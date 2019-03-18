@@ -5,8 +5,10 @@ import Search from "./Search"
 import Stock from "./Stock"
 import superagent from "superagent"
 import { Card } from "@blueprintjs/core"
+import { displayMoney } from "./common"
 
 interface State {
+	// Money is stored internally as cents to avoid floating point math errors.
 	money: number
 
 	selectedStock: null | GraphedStock
@@ -34,7 +36,7 @@ export default class Index extends React.Component<any, State> {
 		super(props)
 
 		this.state = {
-			money: 100,
+			money: 100 * 100,
 
 			selectedStock: null,
 
@@ -53,16 +55,16 @@ export default class Index extends React.Component<any, State> {
 
 	calculateNetWorth() {
 		// TODO: include value of assets
-		return this.state.money.toFixed(2)
+		return this.state.money
 	}
 
 	render() {
 		return (
 			<React.Fragment>
 				<Card id="sidebar" elevation={3}>
-					Money: ${this.state.money.toFixed(2)}
+					Money: {displayMoney(this.state.money)}
 					<br />
-					Net worth: ${this.calculateNetWorth()}
+					Net worth: {displayMoney(this.calculateNetWorth())}
 
 					<div id="portfolio">
 						<Search money={this.state.money} stock={this.state.selectedStock} onSearch={(term) => this.updateGraph(term)} />

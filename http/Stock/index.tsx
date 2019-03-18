@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Card, Icon } from "@blueprintjs/core"
 import { PortfolioStock } from ".."
+import { displayMoney, displayPercent } from "../common"
 
 interface Props {
 	stock: PortfolioStock
@@ -28,11 +29,11 @@ export default class Stock extends React.Component<Props, State> {
 					{this.props.stock.shares} Share{this.props.stock.shares === 1 ? "" : "s"}
 				</div>
 				<div className="stock-stats">
-					${this.props.stock.currentPrice}
+					{displayMoney(this.props.stock.currentPrice)}
 					<br />
 					<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
 						<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
-						{Math.abs(100 * this.getPercent()).toFixed(1)}%
+						{displayPercent(Math.abs(this.getPercent()))}
 					</div>
 				</div>
 			</Card>
