@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Line } from "react-chartjs-2"
-import { Stock } from ".."
+import { GraphedStock } from ".."
 
 interface Props {
-	stock: null | Stock
+	stock: null | GraphedStock
 }
 
 export default class Graph extends React.Component<Props> {

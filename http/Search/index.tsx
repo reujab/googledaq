@@ -1,14 +1,14 @@
 import * as React from "react"
 import Spinner from "react-spinkit"
 import { Button, Callout, Card, Icon, InputGroup, NumericInput } from "@blueprintjs/core"
-import { Stock } from ".."
+import { GraphedStock } from ".."
 
 // There is a <Collapse> from blueprint, but it's not nearly as good as the one from material.
 import Collapse from "@material-ui/core/Collapse"
 
 interface Props {
 	money: number
-	stock: null | Stock
+	stock: null | GraphedStock
 	onSearch: (string) => void
 }
 
