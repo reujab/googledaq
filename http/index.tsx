@@ -2,22 +2,31 @@ import * as React from "react"
 import Graph from "./Graph"
 import ReactDOM from "react-dom"
 import Search from "./Search"
+import Stock from "./Stock"
 import superagent from "superagent"
 import { Card } from "@blueprintjs/core"
 
 interface State {
 	money: number
 
-	selectedStock: null | Stock
+	selectedStock: null | GraphedStock
 
-	portfolio: Stock[]
+	portfolio: PortfolioStock[]
 }
 
-export interface Stock {
+export interface GraphedStock {
 	name: string
 	dates: string[]
 	costs: number[]
 	currentCost: number
+}
+
+export interface PortfolioStock {
+	purchaseDate: Date
+	name: string
+	shares: number
+	originalPrice: number
+	currentPrice: number
 }
 
 export default class Index extends React.Component<any, State> {
@@ -57,15 +66,12 @@ export default class Index extends React.Component<any, State> {
 
 					<div id="portfolio">
 						<Search money={this.state.money} stock={this.state.selectedStock} onSearch={(term) => this.updateGraph(term)} />
-						{this.state.portfolio.map((term) => (
-							<Card
-								key={term.name}
-								interactive
-								elevation={1}
-								onClick={() => this.updateGraph(term.name)}
-							>
-								{term.name}
-							</Card>
+						{this.state.portfolio.map((stock) => (
+							<Stock
+								key={`${Number(stock.purchaseDate)}-${stock.name}`}
+								stock={stock}
+								onClick={() => this.updateGraph(stock.name)}
+							/>
 						))}
 					</div>
 				</Card>
