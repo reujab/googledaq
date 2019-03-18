@@ -4,7 +4,7 @@ import { Button, Callout, Card, Icon, InputGroup, NumericInput } from "@blueprin
 import { Stock } from ".."
 
 // There is a <Collapse> from blueprint, but it's not nearly as good as the one from material.
-import { Collapse } from "@material-ui/core"
+import Collapse from "@material-ui/core/Collapse"
 
 interface Props {
 	money: number
