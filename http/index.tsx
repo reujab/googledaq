@@ -70,7 +70,7 @@ export default class Index extends React.Component<any, State> {
 		// If a stock with that name and original price already exists in the portfolio, simply
 		// increase the number of shares.
 		const portfolio = _.cloneDeep(this.state.portfolio)
-		const existingStock = portfolio.find((stock) => stock.name === this.state.selectedStock.name && stock.originalPrice === sharePrice)
+		const existingStock = portfolio.find((stock) => stock.name.toLowerCase() === this.state.selectedStock.name.toLowerCase() && stock.originalPrice === sharePrice)
 		if (existingStock) {
 			existingStock.shares += shares
 		} else {
