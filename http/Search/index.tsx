@@ -1,6 +1,5 @@
 import * as React from "react"
-import Spinner from "react-spinkit"
-import { Button, Callout, Card, Icon, InputGroup, NumericInput } from "@blueprintjs/core"
+import { Button, Callout, Card, Icon, InputGroup, NumericInput, Spinner } from "@blueprintjs/core"
 import { GraphedStock } from ".."
 
 // There is a <Collapse> from blueprint, but it's not nearly as good as the one from material.
@@ -62,7 +61,7 @@ export default class Search extends React.Component<Props, State> {
 					</Collapse>
 					<Collapse in={this.state.loading && !this.props.stock}>
 						<div style={{ marginBottom: 10, display: "flex", justifyContent: "center" }}>
-							<Spinner name="rotating-plane" fadeIn="none" />
+							<Spinner size={58} />
 						</div>
 					</Collapse>
 					<Collapse in={!!this.props.stock}>
