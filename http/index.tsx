@@ -55,8 +55,7 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	calculateNetWorth() {
-		// TODO: include value of assets
-		return this.state.money
+		return this.state.money + this.state.portfolio.reduce((sum, stock) => sum + stock.shares * stock.currentPrice, 0)
 	}
 
 	buy(shares) {
