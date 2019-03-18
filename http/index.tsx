@@ -3,6 +3,7 @@ import Graph from "./Graph"
 import ReactDOM from "react-dom"
 import Search from "./Search"
 import Stock from "./Stock"
+import _ from "lodash"
 import superagent from "superagent"
 import { Card } from "@blueprintjs/core"
 import { displayMoney } from "./common"
@@ -58,6 +59,36 @@ export default class Index extends React.Component<any, State> {
 		return this.state.money
 	}
 
+	buy(shares) {
+		const sharePrice = this.state.selectedStock.currentCost
+		const totalCost = shares * sharePrice
+
+		if (totalCost > this.state.money) {
+			return
+		}
+
+		// If a stock with that name and original price already exists in the portfolio, simply
+		// increase the number of shares.
+		const portfolio = _.cloneDeep(this.state.portfolio)
+		const existingStock = portfolio.find((stock) => stock.name === this.state.selectedStock.name && stock.originalPrice === sharePrice)
+		if (existingStock) {
+			existingStock.shares += shares
+		} else {
+			portfolio.push({
+				purchaseDate: new Date(),
+				name: this.state.selectedStock.name,
+				shares,
+				originalPrice: sharePrice,
+				currentPrice: sharePrice,
+			})
+		}
+
+		this.setState({
+			money: this.state.money - totalCost,
+			portfolio,
+		})
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -67,7 +98,12 @@ export default class Index extends React.Component<any, State> {
 					Net worth: {displayMoney(this.calculateNetWorth())}
 
 					<div id="portfolio">
-						<Search money={this.state.money} stock={this.state.selectedStock} onSearch={(term) => this.updateGraph(term)} />
+						<Search
+							money={this.state.money}
+							stock={this.state.selectedStock}
+							onSearch={this.updateGraph.bind(this)}
+							onBuy={this.buy.bind(this)}
+						/>
 						{this.state.portfolio.map((stock) => (
 							<Stock
 								key={`${Number(stock.purchaseDate)}-${stock.name}`}

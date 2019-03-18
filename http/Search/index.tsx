@@ -10,6 +10,7 @@ interface Props {
 	money: number
 	stock: null | GraphedStock
 	onSearch: (string) => void
+	onBuy: (number) => void
 }
 
 interface State {
@@ -55,7 +56,7 @@ export default class Search extends React.Component<Props, State> {
 								const value = (e.target as HTMLInputElement).value
 								if (e.key === "Enter" && value) {
 									this.setState({ loading: true })
-									this.props.onSearch(value)
+									this.props.onSearch(value.trim())
 								}
 							}}
 						/>
@@ -88,6 +89,7 @@ export default class Search extends React.Component<Props, State> {
 									<Button
 										style={{ flex: "auto 0", marginLeft: 5 }}
 										disabled={!this.state.shares}
+										onClick={() => this.props.onBuy(this.state.shares)}
 									>
 										Buy
 									</Button>
