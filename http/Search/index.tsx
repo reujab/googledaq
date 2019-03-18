@@ -96,9 +96,15 @@ export default class Search extends React.Component<Props, State> {
 								</div>
 
 								<Collapse in={this.state.shares > 0}>
-									<Callout style={{ marginBottom: 10 }} icon="info-sign" intent="primary">
-										Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost {displayMoney(this.getPrice())}, which is {displayPercent(this.getPrice() / this.props.money)} of your total money.
-									</Callout>
+									{this.getPrice() <= this.props.money ? (
+										<Callout style={{ marginBottom: 10 }} icon="info-sign" intent="primary">
+											Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost {displayMoney(this.getPrice())}, which is {displayPercent(this.getPrice() / this.props.money)} of your total money.
+										</Callout>
+									) : ((
+										<Callout style={{ marginBottom: 10 }} icon="error" intent="danger">
+											You don't have enough money to buy {this.state.shares} share{this.state.shares === 1 ? "" : "s"}.
+										</Callout>
+									))}
 								</Collapse>
 							</div>
 						)}
