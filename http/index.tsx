@@ -28,8 +28,6 @@ export interface GraphedStock {
 
 // Metadata of a purchased stock
 export interface PortfolioStock {
-	// `purchaseDate` is not currently used.
-	purchaseDate: Date
 	name: string
 	shares: number
 	originalPrice: number
@@ -102,7 +100,6 @@ export default class Index extends React.Component<any, State> {
 			existingStock.shares += shares
 		} else {
 			portfolio.push({
-				purchaseDate: new Date(),
 				name: this.state.graph.name,
 				shares,
 				originalPrice: sharePrice,
@@ -144,7 +141,7 @@ export default class Index extends React.Component<any, State> {
 						/>
 						{this.state.portfolio.map((stock) => (
 							<Stock
-								key={`${Number(stock.purchaseDate)}-${stock.name}`}
+								key={`${Number(stock.originalPrice)}-${stock.name.toLowerCase()}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
 								onClick={() => this.updateGraph(stock.name)}
