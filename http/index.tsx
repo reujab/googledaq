@@ -45,6 +45,8 @@ export default class Index extends React.Component<any, State> {
 			portfolio: [],
 			cache: [],
 		}
+
+		setInterval(this.refreshPortfolio.bind(this), 1000 * 60 * 10)
 	}
 
 	async getGraph(term): Promise<GraphedStock> {
