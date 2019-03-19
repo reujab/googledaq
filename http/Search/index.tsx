@@ -60,7 +60,7 @@ export default class Search extends React.Component<Props, State> {
 						onKeyDown={(e) => {
 							const value = (e.target as HTMLInputElement).value
 							if (e.key === "Enter" && value) {
-								this.props.onSearch(value.trim())
+								this.props.onSearch(value.trim().toLowerCase())
 							}
 						}}
 					/>

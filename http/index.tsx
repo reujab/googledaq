@@ -51,7 +51,7 @@ export default class Index extends React.Component<any, State> {
 		const stock = (await superagent.get("/graph.json").query({ term })).body
 		stock.lastUpdated = new Date()
 		this.setState({
-			cache: this.state.cache.filter((cachedStock) => cachedStock.name.toLowerCase() !== stock.name.toLowerCase()).concat([stock]),
+			cache: this.state.cache.filter((cachedStock) => cachedStock.name !== stock.name).concat([stock]),
 		})
 		return stock
 	}
@@ -63,7 +63,7 @@ export default class Index extends React.Component<any, State> {
 
 		for (const stock of this.state.cache) {
 			if (
-				stock.name.toLowerCase() === term.toLowerCase() &&
+				stock.name === term &&
 				Date.now() - Number(stock.lastUpdated) < 1000 * 60 * 5
 			) {
 				this.setState({ graph: stock })
@@ -84,7 +84,7 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	getCachedGraph(stock: PortfolioStock): GraphedStock {
-		return this.state.cache.find((cachedStock) => cachedStock.name.toLowerCase() === stock.name.toLowerCase())
+		return this.state.cache.find((cachedStock) => cachedStock.name === stock.name)
 	}
 
 	calculateNetWorth() {
@@ -102,7 +102,7 @@ export default class Index extends React.Component<any, State> {
 		// If a stock with that name and original price already exists in the portfolio, simply
 		// increase the number of shares.
 		const portfolio = _.cloneDeep(this.state.portfolio)
-		const existingStock = portfolio.find((stock) => stock.name.toLowerCase() === this.state.graph.name.toLowerCase() && stock.originalPrice === sharePrice)
+		const existingStock = portfolio.find((stock) => stock.name === this.state.graph.name && stock.originalPrice === sharePrice)
 		if (existingStock) {
 			existingStock.shares += shares
 		} else {
@@ -164,7 +164,7 @@ export default class Index extends React.Component<any, State> {
 						/>
 						{this.state.portfolio.map((stock) => (
 							<Stock
-								key={`${Number(stock.originalPrice)}-${stock.name.toLowerCase()}`}
+								key={`${Number(stock.originalPrice)}-${stock.name}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
 								onClick={() => !stock.loading && this.updateGraph(stock.name)}
