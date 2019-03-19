@@ -12,23 +12,27 @@ interface State {
 	// Money is stored internally as cents to avoid floating point math errors.
 	money: number
 	loading: boolean
-	selectedStock: null | GraphedStock
+	graph: null | GraphedStock
 	portfolio: PortfolioStock[]
+	cache: GraphedStock[]
 }
 
+// Metadata of a stock
 export interface GraphedStock {
+	lastUpdated: Date
 	name: string
 	dates: string[]
 	costs: number[]
 	currentCost: number
 }
 
+// Metadata of a purchased stock
 export interface PortfolioStock {
+	// `purchaseDate` is not currently used.
 	purchaseDate: Date
 	name: string
 	shares: number
 	originalPrice: number
-	currentPrice: number
 }
 
 export default class Index extends React.Component<any, State> {
@@ -38,8 +42,9 @@ export default class Index extends React.Component<any, State> {
 		this.state = {
 			money: 100 * 100,
 			loading: false,
-			selectedStock: null,
+			graph: null,
 			portfolio: [],
+			cache: [],
 		}
 	}
 
@@ -48,24 +53,41 @@ export default class Index extends React.Component<any, State> {
 			return
 		}
 
-		this.setState({ selectedStock: null })
+		for (const stock of this.state.cache) {
+			if (
+				stock.name.toLowerCase() === term.toLowerCase() &&
+				Date.now() - Number(stock.lastUpdated) < 1000 * 60 * 5
+			) {
+				this.setState({ graph: stock })
+				return
+			}
+		}
+
+		this.setState({ graph: null })
 
 		if (term) {
 			this.setState({ loading: true })
 			// Sets dates and costs
+			const stock = (await superagent.get("/graph.json").query({ term })).body
+			stock.lastUpdated = new Date()
 			this.setState({
-				selectedStock: (await superagent.get("/graph.json").query({ term })).body,
+				graph: stock,
 				loading: false,
+				cache: this.state.cache.filter((cachedStock) => cachedStock.name.toLowerCase() !== stock.name.toLowerCase()).concat([stock]),
 			})
 		}
 	}
 
+	getCachedGraph(stock: PortfolioStock): GraphedStock {
+		return this.state.cache.find((cachedStock) => cachedStock.name.toLowerCase() === stock.name.toLowerCase())
+	}
+
 	calculateNetWorth() {
-		return this.state.money + this.state.portfolio.reduce((sum, stock) => sum + stock.shares * stock.currentPrice, 0)
+		return this.state.money + this.state.portfolio.reduce((sum, stock) => sum + stock.shares * this.getCachedGraph(stock).currentCost, 0)
 	}
 
 	buy(shares) {
-		const sharePrice = this.state.selectedStock.currentCost
+		const sharePrice = this.state.graph.currentCost
 		const totalCost = shares * sharePrice
 
 		if (totalCost > this.state.money) {
@@ -75,16 +97,15 @@ export default class Index extends React.Component<any, State> {
 		// If a stock with that name and original price already exists in the portfolio, simply
 		// increase the number of shares.
 		const portfolio = _.cloneDeep(this.state.portfolio)
-		const existingStock = portfolio.find((stock) => stock.name.toLowerCase() === this.state.selectedStock.name.toLowerCase() && stock.originalPrice === sharePrice)
+		const existingStock = portfolio.find((stock) => stock.name.toLowerCase() === this.state.graph.name.toLowerCase() && stock.originalPrice === sharePrice)
 		if (existingStock) {
 			existingStock.shares += shares
 		} else {
 			portfolio.push({
 				purchaseDate: new Date(),
-				name: this.state.selectedStock.name,
+				name: this.state.graph.name,
 				shares,
 				originalPrice: sharePrice,
-				currentPrice: sharePrice,
 			})
 		}
 
@@ -117,7 +138,7 @@ export default class Index extends React.Component<any, State> {
 						<Search
 							money={this.state.money}
 							loading={this.state.loading}
-							stock={this.state.selectedStock}
+							stock={this.state.graph}
 							onSearch={this.updateGraph.bind(this)}
 							onBuy={this.buy.bind(this)}
 						/>
@@ -125,6 +146,7 @@ export default class Index extends React.Component<any, State> {
 							<Stock
 								key={`${Number(stock.purchaseDate)}-${stock.name}`}
 								stock={stock}
+								graph={this.getCachedGraph(stock)}
 								onClick={() => this.updateGraph(stock.name)}
 							/>
 						))}
@@ -135,7 +157,7 @@ export default class Index extends React.Component<any, State> {
 						width: "80%",
 						margin: "auto",
 					}}>
-						<Graph stock={this.state.selectedStock} />
+						<Graph stock={this.state.graph} />
 					</div>
 				</div>
 			</React.Fragment>
