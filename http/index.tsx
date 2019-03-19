@@ -38,15 +38,28 @@ export default class Index extends React.Component<any, State> {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			money: 100 * 100,
-			loading: false,
-			graph: null,
-			portfolio: [],
-			cache: [],
-		}
+		this.state = Object.assign(
+			{
+				money: 100 * 100,
+				portfolio: [],
+				cache: [],
+			},
+			JSON.parse(localStorage.indexState || "{}"),
+			{
+				loading: false,
+				graph: null,
+			},
+		)
 
 		setInterval(this.refreshPortfolio.bind(this), 1000 * 60 * 10)
+	}
+
+	componentDidMount() {
+		this.refreshPortfolio()
+	}
+
+	componentDidUpdate() {
+		localStorage.indexState = JSON.stringify(this.state)
 	}
 
 	async getGraph(term): Promise<GraphedStock> {
