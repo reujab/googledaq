@@ -11,9 +11,8 @@ import { displayMoney } from "./common"
 interface State {
 	// Money is stored internally as cents to avoid floating point math errors.
 	money: number
-
+	loading: boolean
 	selectedStock: null | GraphedStock
-
 	portfolio: PortfolioStock[]
 }
 
@@ -38,19 +37,26 @@ export default class Index extends React.Component<any, State> {
 
 		this.state = {
 			money: 100 * 100,
-
+			loading: false,
 			selectedStock: null,
-
 			portfolio: [],
 		}
 	}
 
 	async updateGraph(term) {
+		if (this.state.loading) {
+			return
+		}
+
 		this.setState({ selectedStock: null })
 
 		if (term) {
+			this.setState({ loading: true })
 			// Sets dates and costs
-			this.setState({ selectedStock: (await superagent.get("/graph.json").query({ term })).body })
+			this.setState({
+				selectedStock: (await superagent.get("/graph.json").query({ term })).body,
+				loading: false,
+			})
 		}
 	}
 
@@ -99,6 +105,7 @@ export default class Index extends React.Component<any, State> {
 					<div id="portfolio">
 						<Search
 							money={this.state.money}
+							loading={this.state.loading}
 							stock={this.state.selectedStock}
 							onSearch={this.updateGraph.bind(this)}
 							onBuy={this.buy.bind(this)}

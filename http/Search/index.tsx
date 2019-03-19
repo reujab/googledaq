@@ -8,15 +8,15 @@ import Collapse from "@material-ui/core/Collapse"
 
 interface Props {
 	money: number
+	loading: boolean
 	stock: null | GraphedStock
+
 	onSearch: (string) => void
 	onBuy: (number) => void
 }
 
 interface State {
-	open: boolean
-	loading: boolean
-
+	searching: boolean
 	shares: number
 }
 
@@ -25,91 +25,94 @@ export default class Search extends React.Component<Props, State> {
 		super(props)
 
 		this.state = {
-			open: false,
-			loading: false,
-
-			shares: 0
+			searching: false,
+			shares: 0,
 		}
 	}
 
-	getPrice() {
-		return this.state.shares * this.props.stock.currentCost
+	isOpen() {
+		return this.state.searching || this.props.loading || !!this.props.stock
+	}
+
+	getSharePrice() {
+		return this.props.stock ? this.props.stock.currentCost : 0
+	}
+
+	getTotalPrice() {
+		return this.state.shares * this.getSharePrice()
 	}
 
 	render() {
 		return (
 			<Card
-				interactive={!this.state.open}
-				elevation={this.state.open ? 4 : 2}
-				onClick={() => this.setState({ open: true })}
+				interactive={!this.isOpen()}
+				elevation={this.isOpen() ? 4 : 2}
+				onClick={() => this.setState({ searching: true })}
 			>
-				<Collapse in={!this.state.open} style={{ textAlign: "center" }}>
+				<Collapse in={!this.isOpen()} style={{ textAlign: "center" }}>
 					<Icon icon="plus" />
 				</Collapse>
-				<Collapse in={this.state.open}>
-					<Collapse in={!this.state.loading && !this.props.stock}>
-						<InputGroup
-							style={{ marginBottom: 10 }}
-							defaultValue={this.props.stock && this.props.stock.name}
-							placeholder="Search term"
-							onKeyDown={(e) => {
-								const value = (e.target as HTMLInputElement).value
-								if (e.key === "Enter" && value) {
-									this.setState({ loading: true })
-									this.props.onSearch(value.trim())
-								}
-							}}
-						/>
-					</Collapse>
-					<Collapse in={this.state.loading && !this.props.stock}>
-						<div style={{ marginBottom: 10, display: "flex", justifyContent: "center" }}>
-							<Spinner size={58} />
-						</div>
-					</Collapse>
-					<Collapse in={!!this.props.stock}>
-						{this.props.stock && (
-							<div>
-								Share price: {displayMoney(this.props.stock.currentCost)}
+				<Collapse in={this.isOpen() && !this.props.stock && !this.props.loading}>
+					<InputGroup
+						leftIcon="search"
+						placeholder="Search term"
 
-								<div style={{
-									display: "flex",
-									margin: "10px 0"
-								}}>
-									<div style={{ flex: "1 0" }}>
-										<NumericInput
-											clampValueOnBlur
-											fill
-											min={0}
-											minorStepSize={null}
-											max={Math.floor(this.props.money / this.props.stock.currentCost)}
-											onValueChange={(shares) => this.setState({ shares: shares || 0 })}
-											value={this.state.shares}
-										/>
-									</div>
-									<Button
-										style={{ flex: "auto 0", marginLeft: 5 }}
-										disabled={!this.state.shares}
-										onClick={() => this.props.onBuy(this.state.shares)}
-									>
-										Buy
-									</Button>
-								</div>
+						onKeyDown={(e) => {
+							const value = (e.target as HTMLInputElement).value
+							if (e.key === "Enter" && value) {
+								this.props.onSearch(value.trim())
+							}
+						}}
+					/>
+				</Collapse>
+				<Collapse in={this.props.loading}>
+					<div style={{ display: "flex", justifyContent: "center" }}>
+						<Spinner size={58} />
+					</div>
+				</Collapse>
+				<Collapse in={!!this.props.stock}>
+					<div>
+						Share price: {displayMoney(this.getSharePrice())}
 
-								<Collapse in={this.state.shares > 0}>
-									{this.getPrice() <= this.props.money ? (
-										<Callout style={{ marginBottom: 10 }} icon="info-sign" intent="primary">
-											Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost {displayMoney(this.getPrice())}, which is {displayPercent(this.getPrice() / this.props.money)} of your total money.
-										</Callout>
-									) : ((
-										<Callout style={{ marginBottom: 10 }} icon="error" intent="danger">
-											You don't have enough money to buy {this.state.shares} share{this.state.shares === 1 ? "" : "s"}.
-										</Callout>
-									))}
-								</Collapse>
+						<div style={{ display: "flex", marginTop: 10 }}>
+							<div style={{ flex: "1 0" }}>
+								<NumericInput
+									clampValueOnBlur
+									fill
+									min={0}
+									minorStepSize={null}
+									max={Math.floor(this.props.money / this.getSharePrice())}
+									onValueChange={(shares) => this.setState({ shares: shares || 0 })}
+									value={this.state.shares}
+								/>
 							</div>
-						)}
-					</Collapse>
+							<Button
+								style={{ flex: "auto 0", marginLeft: 5 }}
+								disabled={!this.state.shares}
+								onClick={() => this.props.onBuy(Math.floor(this.state.shares))}
+							>
+								Buy
+							</Button>
+						</div>
+
+						<Collapse in={this.state.shares > 0}>
+							<div style={{ height: 10 }} />
+							{this.getTotalPrice() <= this.props.money ? (
+								<Callout icon="info-sign" intent="primary">
+									Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost {displayMoney(this.getTotalPrice())}, which is {displayPercent(this.getTotalPrice() / this.props.money)} of your total money.
+								</Callout>
+							) : ((
+								<Callout icon="error" intent="danger">
+									You don't have enough money to buy {this.state.shares} share{this.state.shares === 1 ? "" : "s"}.
+								</Callout>
+							))}
+						</Collapse>
+					</div>
+				</Collapse>
+
+				<Collapse in={this.isOpen() && !this.props.loading}>
 					<Button
+						style={{ marginTop: 10 }}
 						fill
 						onClick={(e) => {
 							// Stops the event from bubbling to the card, which will set open to
@@ -117,9 +120,7 @@ export default class Search extends React.Component<Props, State> {
 							e.stopPropagation()
 							this.props.onSearch("")
 							this.setState({
-								open: false,
-								loading: false,
-
+								searching: false,
 								shares: 0,
 							})
 						}}
