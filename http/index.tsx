@@ -31,6 +31,7 @@ export interface PortfolioStock {
 	name: string
 	shares: number
 	originalPrice: number
+	loading: boolean
 }
 
 export default class Index extends React.Component<any, State> {
@@ -44,6 +45,15 @@ export default class Index extends React.Component<any, State> {
 			portfolio: [],
 			cache: [],
 		}
+	}
+
+	async getGraph(term): Promise<GraphedStock> {
+		const stock = (await superagent.get("/graph.json").query({ term })).body
+		stock.lastUpdated = new Date()
+		this.setState({
+			cache: this.state.cache.filter((cachedStock) => cachedStock.name.toLowerCase() !== stock.name.toLowerCase()).concat([stock]),
+		})
+		return stock
 	}
 
 	async updateGraph(term) {
@@ -66,12 +76,9 @@ export default class Index extends React.Component<any, State> {
 		if (term) {
 			this.setState({ loading: true })
 			// Sets dates and costs
-			const stock = (await superagent.get("/graph.json").query({ term })).body
-			stock.lastUpdated = new Date()
 			this.setState({
-				graph: stock,
+				graph: await this.getGraph(term),
 				loading: false,
-				cache: this.state.cache.filter((cachedStock) => cachedStock.name.toLowerCase() !== stock.name.toLowerCase()).concat([stock]),
 			})
 		}
 	}
@@ -103,6 +110,7 @@ export default class Index extends React.Component<any, State> {
 				name: this.state.graph.name,
 				shares,
 				originalPrice: sharePrice,
+				loading: false,
 			})
 		}
 
@@ -113,7 +121,22 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	refreshPortfolio() {
-		// TODO
+		this.setState({
+			portfolio: this.state.portfolio.map((stock) => Object.assign(stock, {
+				loading: true,
+			}))
+		})
+
+		for (const stock of this.state.portfolio) {
+			this.getGraph(stock.name).then(() => this.setState({
+				portfolio: this.state.portfolio.map((subStock) => {
+					if (stock === subStock) {
+						return Object.assign(subStock, { loading: false })
+					}
+					return subStock
+				})
+			}))
+		}
 	}
 
 	render() {
@@ -144,7 +167,7 @@ export default class Index extends React.Component<any, State> {
 								key={`${Number(stock.originalPrice)}-${stock.name.toLowerCase()}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
-								onClick={() => this.updateGraph(stock.name)}
+								onClick={() => !stock.loading && this.updateGraph(stock.name)}
 							/>
 						))}
 					</div>

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Card, Icon } from "@blueprintjs/core"
+import { Card, Icon, Spinner } from "@blueprintjs/core"
 import { PortfolioStock, GraphedStock } from ".."
 import { displayMoney, displayPercent } from "../common"
 
@@ -20,10 +20,15 @@ export default class Stock extends React.Component<Props, State> {
 		return (
 			<Card
 				className="stock"
-				interactive
+				interactive={!this.props.stock.loading}
 				elevation={1}
 				onClick={this.props.onClick}
 			>
+				{this.props.stock.loading && (
+					<div className="stock-spinner">
+						<Spinner />
+					</div>
+				)}
 				<div className="stock-name">
 					<div>{this.props.stock.name}</div>
 					<div>{this.props.stock.shares} Share{this.props.stock.shares === 1 ? "" : "s"}</div>
