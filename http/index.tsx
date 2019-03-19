@@ -171,7 +171,7 @@ export default class Index extends React.Component<any, State> {
 						/>
 						{this.state.portfolio.map((stock) => (
 							<Stock
-								key={`${Number(stock.originalPrice)}-${stock.name}`}
+								key={`${stock.originalPrice}-${stock.name}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
 								onClick={() => !stock.loading && this.updateGraph(stock.name)}
