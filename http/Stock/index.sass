@@ -1,5 +1,4 @@
 .stock
-	display: flex
 	position: relative
 
 .stock-spinner
@@ -12,14 +11,18 @@
 	position: absolute
 	right: 0
 	top: 0
+	z-index: 1
 
-.stock-name
+.stock-stats
+	display: flex
+
+.stock-stats-left
 	flex: 1 0
 	display: flex
 	flex-direction: column
 	justify-content: space-between
 
-.stock-stats
+.stock-stats-right
 	flex: auto 0
 	text-align: right
 

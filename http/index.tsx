@@ -127,6 +127,32 @@ export default class Index extends React.Component<any, State> {
 		})
 	}
 
+	sell(stock: PortfolioStock, shares: number) {
+		if (shares === stock.shares) {
+			this.setState({
+				portfolio: this.state.portfolio.filter((val) => val !== stock),
+			})
+		} else if (shares < stock.shares) {
+			this.setState({
+				portfolio: this.state.portfolio.map((val) => {
+					if (val === stock) {
+						return Object.assign({}, stock, {
+							shares: stock.shares - shares,
+						})
+					}
+
+					return val
+				}),
+			})
+		} else {
+			return
+		}
+
+		this.setState({
+			money: this.state.money + shares * this.getCachedGraph(stock).currentCost,
+		})
+	}
+
 	refreshPortfolio() {
 		this.setState({
 			portfolio: this.state.portfolio.map((stock) => Object.assign(stock, {
@@ -174,7 +200,9 @@ export default class Index extends React.Component<any, State> {
 								key={`${stock.originalPrice}-${stock.name}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
+								open={this.state.graph && this.state.graph.name === stock.name}
 								onClick={() => !stock.loading && this.updateGraph(stock.name)}
+								onSell={this.sell.bind(this, stock)}
 							/>
 						))}
 					</div>
