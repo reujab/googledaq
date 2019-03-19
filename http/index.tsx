@@ -50,9 +50,14 @@ export default class Index extends React.Component<any, State> {
 	async getGraph(term): Promise<GraphedStock> {
 		const stock = (await superagent.get("/graph.json").query({ term })).body
 		stock.lastUpdated = new Date()
+
+		// Updates cache
+		const cache = this.state.cache.filter((cachedStock) => cachedStock.name !== stock.name).concat([stock])
 		this.setState({
-			cache: this.state.cache.filter((cachedStock) => cachedStock.name !== stock.name).concat([stock]),
+			cache,
+			graph: this.state.graph && cache.find((cachedStock) => cachedStock.name === this.state.graph.name),
 		})
+
 		return stock
 	}
 
