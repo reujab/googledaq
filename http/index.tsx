@@ -5,7 +5,7 @@ import Search from "./Search"
 import Stock from "./Stock"
 import _ from "lodash"
 import superagent from "superagent"
-import { Card } from "@blueprintjs/core"
+import { Button, Card, Icon } from "@blueprintjs/core"
 import { displayMoney } from "./common"
 
 interface State {
@@ -94,6 +94,10 @@ export default class Index extends React.Component<any, State> {
 		})
 	}
 
+	refreshPortfolio() {
+		// TODO
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -103,6 +107,13 @@ export default class Index extends React.Component<any, State> {
 					Money: {displayMoney(this.state.money)}
 
 					<div id="portfolio">
+						<h3 className="bp3-heading">
+							Portfolio
+							<Button onClick={() => this.refreshPortfolio()}>
+								<Icon icon="refresh" />
+							</Button>
+						</h3>
+
 						<Search
 							money={this.state.money}
 							loading={this.state.loading}
