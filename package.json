@@ -19,6 +19,7 @@
     "google-trends-api": "^4.9.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "peity-react": "0.0.7",
     "react": "^16.8.4",
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.8.4",

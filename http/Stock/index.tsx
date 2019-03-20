@@ -1,6 +1,7 @@
 import * as React from "react"
 import Collapse from "@material-ui/core/Collapse"
 import { Button, Card, Icon, NumericInput, Spinner } from "@blueprintjs/core"
+import { Line } from "peity-react"
 import { PortfolioStock, GraphedStock } from ".."
 import { displayMoney, displayPercent } from "../common"
 
@@ -51,10 +52,12 @@ export default class Stock extends React.Component<Props, State> {
 					</div>
 					<div className="stock-stats-right">
 						{displayMoney(this.props.graph.currentCost)}/share
-						<br />
-						<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
-							<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
-							{displayPercent(Math.abs(this.getPercent()))}
+						<div className="stock-graph-wrapper">
+							<Line values={this.props.graph.costs} width={64} />
+							<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
+								<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
+								{displayPercent(Math.abs(this.getPercent()))}
+							</div>
 						</div>
 					</div>
 				</div>
