@@ -4,9 +4,9 @@ import ReactDOM from "react-dom"
 import Search from "./Search"
 import Stock from "./Stock"
 import _ from "lodash"
-import superagent from "superagent"
 import { Button, Card, Icon } from "@blueprintjs/core"
 import { displayMoney } from "./common"
+import { getGraph } from "./trends"
 
 interface State {
 	// Money is stored internally as cents to avoid floating point math errors.
@@ -63,8 +63,9 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	async getGraph(term): Promise<GraphedStock> {
-		const stock = (await superagent.get("/graph.json").query({ term })).body
-		stock.lastUpdated = new Date()
+		const stock = Object.assign({
+			lastUpdated: new Date(),
+		}, await getGraph(term)) as GraphedStock
 
 		// Updates cache
 		const cache = this.state.cache.filter((cachedStock) => cachedStock.name !== stock.name).concat([stock])
