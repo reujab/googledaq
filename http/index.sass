@@ -1,5 +1,6 @@
 @import "../node_modules/@blueprintjs/core/lib/css/blueprint.css"
 @import "../node_modules/normalize.css/normalize.css"
+@import "Header"
 @import "Stock"
 
 html, body, #root
@@ -8,14 +9,16 @@ html, body, #root
 #root
 	display: flex
 
-#sidebar, #main-view
+#sidebar, #graph-wrapper
 	overflow: auto
 
 #sidebar
+	border-radius: 0
 	min-width: 350px
 	width: 25%
 	max-width: 400px
 	flex: auto 0
+	z-index: 1
 
 #portfolio > h3
 	align-items: center
@@ -29,4 +32,9 @@ html, body, #root
 	display: flex
 	flex-direction: column
 	flex: 1 0
-	justify-content: center
+
+#graph-wrapper
+	align-items: center
+	display: flex
+	margin: auto
+	width: 80%

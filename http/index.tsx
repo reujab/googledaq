@@ -1,5 +1,6 @@
 import * as React from "react"
 import Graph from "./Graph"
+import Header from "./Header"
 import ReactDOM from "react-dom"
 import Search from "./Search"
 import Stock from "./Stock"
@@ -222,10 +223,9 @@ export default class Index extends React.Component<any, State> {
 					</div>
 				</Card>
 				<div id="main-view">
-					<div style={{
-						width: "80%",
-						margin: "auto",
-					}}>
+					<Header />
+
+					<div id="graph-wrapper">
 						<Graph stock={this.state.graph} />
 					</div>
 				</div>
