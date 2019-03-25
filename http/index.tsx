@@ -190,6 +190,8 @@ export default class Index extends React.Component<any, State> {
 	render() {
 		return (
 			<React.Fragment>
+				<div id="shadow" />
+
 				<Card id="sidebar" elevation={3}>
 					Net worth: <Money>{this.calculateNetWorth()}</Money>
 					<br />
