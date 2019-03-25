@@ -43,7 +43,7 @@ export default class Graph extends React.Component<Props> {
 					displayColors: false,
 
 					callbacks: {
-						label: (tooltip) => displayMoney(this.props.stock.costs[tooltip.index])
+						label: (tooltip) => formatMoney(this.props.stock.costs[tooltip.index])
 					},
 				},
 			}} />
