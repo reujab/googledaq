@@ -7,9 +7,11 @@
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
     "watch": "parcel watch -d dist --public-url . -t electron --bundle-node-modules http/index.html",
     "build": "parcel build -d dist --public-url . -t electron --bundle-node-modules http/index.html",
-    "pack": "electron-builder",
-    "pack:linux": "rm -rf dist && npm run build && rm -f dist/*.map && electron-builder --linux",
-    "pack:win": "rm -rf dist && npm run build && rm -f dist/*.map && electron-builder --win"
+    "build:production": "parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
+    "prepack": "rm -rf dist && npm run build:production",
+    "pack": "npm run prepack && electron-builder",
+    "pack:linux": "npm run prepack && electron-builder --linux",
+    "pack:win": "npm run prepack && electron-builder --win"
   },
   "author": "reujab",
   "license": "Unlicense",
