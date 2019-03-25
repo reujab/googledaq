@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
-    "watch": "parcel watch -d dist --public-url . -t electron --bundle-node-modules http/index.html",
+    "watch": "parcel watch -d dist --public-url . -t electron --no-hmr http/index.html",
     "build": "parcel build -d dist --public-url . -t electron --bundle-node-modules http/index.html",
     "build:production": "parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
     "prepack": "rm -rf dist && npm run build:production",
