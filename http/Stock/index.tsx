@@ -1,6 +1,6 @@
 import * as React from "react"
 import Collapse from "@material-ui/core/Collapse"
-import { Button, Card, Icon, NumericInput, Spinner } from "@blueprintjs/core"
+import { Button, Card, Icon, NumericInput, Spinner, Tooltip } from "@blueprintjs/core"
 import { Line } from "peity-react"
 import { PortfolioStock, GraphedStock } from ".."
 import { Money, Percent } from "../Utils"
@@ -54,10 +54,12 @@ export default class Stock extends React.Component<Props, State> {
 						<Money>{this.props.graph.currentCost}</Money>/share
 						<div className="stock-graph-wrapper">
 							<Line values={this.props.graph.costs} width={64} />
-							<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
-								<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
-								<Percent>{Math.abs(this.getPercent())}</Percent>
-							</div>
+							<Tooltip content={<React.Fragment>Net {this.props.graph.currentCost >= this.props.stock.originalPrice ? "profit" : "loss"}: <Money>{Math.abs(this.props.graph.currentCost - this.props.stock.originalPrice)}</Money></React.Fragment>} usePortal={false}>
+								<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
+									<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
+									<Percent>{Math.abs(this.getPercent())}</Percent>
+								</div>
+							</Tooltip>
 						</div>
 					</div>
 				</div>
