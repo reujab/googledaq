@@ -1,7 +1,7 @@
 import * as React from "react"
 import { GraphedStock } from ".."
 import { Line } from "react-chartjs-2"
-import { displayMoney } from "../common"
+import { formatMoney } from "../Utils"
 
 interface Props {
 	stock: null | GraphedStock
@@ -23,7 +23,7 @@ export default class Graph extends React.Component<Props> {
 					yAxes: [{
 						ticks: {
 							callback(cents) {
-								return displayMoney(cents)
+								return formatMoney(cents)
 							},
 						},
 					}],

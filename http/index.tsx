@@ -5,7 +5,7 @@ import Search from "./Search"
 import Stock from "./Stock"
 import _ from "lodash"
 import { Button, Card, Icon } from "@blueprintjs/core"
-import { displayMoney } from "./common"
+import { Money } from "./Utils"
 import { getGraph } from "./trends"
 
 interface State {
@@ -190,9 +190,9 @@ export default class Index extends React.Component<any, State> {
 		return (
 			<React.Fragment>
 				<Card id="sidebar" elevation={3}>
-					Net worth: {displayMoney(this.calculateNetWorth())}
+					Net worth: <Money>{this.calculateNetWorth()}</Money>
 					<br />
-					Money: {displayMoney(this.state.money)}
+					Money: <Money>{this.state.money}</Money>
 
 					<div id="portfolio">
 						<h3 className="bp3-heading">

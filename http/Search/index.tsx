@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Button, Callout, Card, Icon, InputGroup, NumericInput, Spinner } from "@blueprintjs/core"
 import { GraphedStock } from ".."
-import { displayMoney, displayPercent } from "../common"
+import { Money, Percent } from "../Utils"
 
 // There is a <Collapse> from blueprint, but it's not nearly as good as the one from material.
 import Collapse from "@material-ui/core/Collapse"
@@ -72,7 +72,7 @@ export default class Search extends React.Component<Props, State> {
 				</Collapse>
 				<Collapse in={!!this.props.stock}>
 					<div>
-						Share price: {displayMoney(this.getSharePrice())}
+						Share price: <Money>{this.getSharePrice()}</Money>
 
 						<div style={{ display: "flex", marginTop: 10 }}>
 							<div style={{ flex: "1 0" }}>
@@ -99,7 +99,7 @@ export default class Search extends React.Component<Props, State> {
 							<div style={{ height: 10 }} />
 							{this.getTotalPrice() <= this.props.money ? (
 								<Callout icon="info-sign" intent="primary">
-									Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost {displayMoney(this.getTotalPrice())}, which is {displayPercent(this.getTotalPrice() / this.props.money)} of your total money.
+									Buying {this.state.shares} share{this.state.shares === 1 ? "" : "s"} will cost <Money>{this.getTotalPrice()}</Money>, which is <Percent>{this.getTotalPrice() / this.props.money}</Percent> of your total money.
 								</Callout>
 							) : ((
 								<Callout icon="error" intent="danger">

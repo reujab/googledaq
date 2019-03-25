@@ -3,7 +3,7 @@ import Collapse from "@material-ui/core/Collapse"
 import { Button, Card, Icon, NumericInput, Spinner } from "@blueprintjs/core"
 import { Line } from "peity-react"
 import { PortfolioStock, GraphedStock } from ".."
-import { displayMoney, displayPercent } from "../common"
+import { Money, Percent } from "../Utils"
 
 interface Props {
 	stock: PortfolioStock
@@ -51,12 +51,12 @@ export default class Stock extends React.Component<Props, State> {
 						<div>{this.props.stock.shares} Share{this.props.stock.shares === 1 ? "" : "s"}</div>
 					</div>
 					<div className="stock-stats-right">
-						{displayMoney(this.props.graph.currentCost)}/share
+						<Money>{this.props.graph.currentCost}</Money>/share
 						<div className="stock-graph-wrapper">
 							<Line values={this.props.graph.costs} width={64} />
 							<div className={`stock-percentage ${this.getPercent() > 0 ? "green" : this.getPercent() < 0 ? "red" : "neutral"}`}>
 								<Icon icon={this.getPercent() >= 1 ? "double-chevron-up" : this.getPercent() <= -1 ? "double-chevron-down" : this.getPercent() > 0 ? "chevron-up" : this.getPercent() < 0 ? "chevron-down" : "small-minus"} />
-								{displayPercent(Math.abs(this.getPercent()))}
+								<Percent>{Math.abs(this.getPercent())}</Percent>
 							</div>
 						</div>
 					</div>
