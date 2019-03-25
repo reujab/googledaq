@@ -60,7 +60,9 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	componentDidUpdate() {
-		localStorage.indexState = JSON.stringify(this.state)
+		localStorage.indexState = JSON.stringify(Object.assign({}, this.state, {
+			cache: this.state.cache.filter((cache) => this.state.portfolio.find((stock) => stock.name === cache.name)),
+		}))
 	}
 
 	async getGraph(term): Promise<GraphedStock> {
