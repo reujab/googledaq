@@ -1,12 +1,15 @@
 {
   "name": "googledaq",
   "version": "0.0.0",
-  "description": "",
+  "description": "An idle game where you trade stocks in Google Trends",
   "main": "main.js",
   "scripts": {
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
-    "watch": "parcel watch -d dist --public-url . -t electron http/index.html",
-    "build": "parcel build -d dist --public-url . -t electron http/index.html"
+    "watch": "parcel watch -d dist --public-url . -t electron --bundle-node-modules http/index.html",
+    "build": "parcel build -d dist --public-url . -t electron --bundle-node-modules http/index.html",
+    "pack": "electron-builder",
+    "pack:linux": "rm -rf dist && npm run build && rm -f dist/*.map && electron-builder --linux",
+    "pack:win": "rm -rf dist && npm run build && rm -f dist/*.map && electron-builder --win"
   },
   "author": "reujab",
   "license": "Unlicense",
@@ -15,7 +18,6 @@
     "@blueprintjs/icons": "^3.6.0",
     "@material-ui/core": "^3.9.2",
     "chart.js": "^2.8.0",
-    "electron": "^4.1.1",
     "google-trends-api": "^4.9.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -32,9 +34,33 @@
     "@types/react": "^16.8.8",
     "@types/react-chartjs-2": "^2.5.7",
     "@types/react-dom": "^16.8.2",
+    "electron": "^4.1.1",
+    "electron-builder": "^20.39.0",
     "electron-react-devtools": "^0.5.3",
     "parcel-bundler": "^1.12.2",
     "sass": "^1.17.3",
     "typescript": "^3.3.3333"
+  },
+  "build": {
+    "appImage": {
+      "systemIntegration": "doNotAsk"
+    },
+    "compression": "store",
+    "directories": {
+      "output": "packages"
+    },
+    "files": [
+      "!node_modules",
+      "dist",
+      "main.js"
+    ],
+    "linux": {
+      "category": "Game",
+      "icon": "googledaq.png"
+    },
+    "win": {
+      "icon": "googledaq.ico",
+      "target": "portable"
+    }
   }
 }
