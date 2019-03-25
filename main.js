@@ -25,6 +25,12 @@ function initWindow() {
 		mainWindow = null
 	})
 
+	mainWindow.webContents.on("before-input-event", (_, e) => {
+		if (e.key === "F12" && e.type === "keyDown") {
+			mainWindow.toggleDevTools()
+		}
+	})
+
 	mainWindow.webContents.on("dom-ready", () => {
 		mainWindow.show()
 	})
