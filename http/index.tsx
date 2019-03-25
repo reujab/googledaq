@@ -20,7 +20,7 @@ interface State {
 
 // Metadata of a stock
 export interface GraphedStock {
-	lastUpdated: Date
+	lastUpdated: number
 	name: string
 	dates: string[]
 	costs: number[]
@@ -65,7 +65,7 @@ export default class Index extends React.Component<any, State> {
 
 	async getGraph(term): Promise<GraphedStock> {
 		const stock = Object.assign({
-			lastUpdated: new Date(),
+			lastUpdated: Date.now(),
 		}, await getGraph(term)) as GraphedStock
 
 		// Updates cache
@@ -86,7 +86,7 @@ export default class Index extends React.Component<any, State> {
 		for (const stock of this.state.cache) {
 			if (
 				stock.name === term &&
-				Date.now() - Number(stock.lastUpdated) < 1000 * 60 * 5
+				Date.now() - stock.lastUpdated < 1000 * 60 * 5
 			) {
 				this.setState({ graph: stock })
 				return
