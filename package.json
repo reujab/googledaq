@@ -7,8 +7,7 @@
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
     "watch": "parcel watch -d dist --public-url . -t electron --no-hmr http/index.html",
     "build": "parcel build -d dist --public-url . -t electron --bundle-node-modules http/index.html",
-    "build:production": "parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
-    "prepack": "rm -rf dist && npm run build:production",
+    "prepack": "rm -rf dist && parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
     "pack": "npm run prepack && electron-builder",
     "pack:linux": "npm run prepack && electron-builder --linux",
     "pack:win": "npm run prepack && electron-builder --win"
