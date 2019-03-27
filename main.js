@@ -13,9 +13,11 @@ function initWindow() {
 	}
 
 	mainWindow = new BrowserWindow({
-		width: 1200,
 		height: 900,
+		minHeight: 600,
+		minWidth: 800,
 		show: false,
+		width: 1200,
 		webPreferences: {
 			nodeIntegration: true,
 		},
