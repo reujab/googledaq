@@ -26,7 +26,8 @@
     "peity-react": "0.0.7",
     "react": "^16.8.5",
     "react-chartjs-2": "^2.7.4",
-    "react-dom": "^16.8.5"
+    "react-dom": "^16.8.5",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/chart.js": "^2.7.50",

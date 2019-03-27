@@ -1,3 +1,10 @@
+// Workaround for uuid requiring crypto
+for (const key of Object.keys(global.require("crypto"))) {
+	if (!["DEFAULT_ENCODING", "createCredentials", "Credentials"].includes(key)) {
+		require("crypto")[key] = global.require("crypto")[key]
+	}
+}
+
 import * as React from "react"
 import Graph from "./Graph"
 import Header from "./Header"
@@ -5,11 +12,15 @@ import ReactDOM from "react-dom"
 import Search from "./Search"
 import Stock from "./Stock"
 import _ from "lodash"
+import uuid from "uuid/v4"
 import { Button, Card, Icon } from "@blueprintjs/core"
 import { Money } from "./Utils"
 import { getGraph } from "./trends"
 
 interface State {
+	gameID: string
+	lastUpdate: number
+
 	// Money is stored internally as cents to avoid floating point math errors.
 	money: number
 	loading: boolean
@@ -41,6 +52,9 @@ export default class Index extends React.Component<any, State> {
 
 		this.state = Object.assign(
 			{
+				gameID: uuid(),
+				lastUpdate: Date.now(),
+
 				money: 100 * 100,
 				portfolio: [],
 				cache: [],
@@ -139,6 +153,8 @@ export default class Index extends React.Component<any, State> {
 		}
 
 		this.setState({
+			lastUpdate: Date.now(),
+
 			money: this.state.money - totalCost,
 			portfolio,
 		})
@@ -166,6 +182,8 @@ export default class Index extends React.Component<any, State> {
 		}
 
 		this.setState({
+			lastUpdate: Date.now(),
+
 			money: this.state.money + shares * this.getCachedGraph(stock).currentCost,
 		})
 	}
@@ -227,7 +245,11 @@ export default class Index extends React.Component<any, State> {
 					</div>
 				</Card>
 				<div id="main-view">
-					<Header />
+					<Header
+						gameID={this.state.gameID}
+						lastUpdate={this.state.lastUpdate}
+						onLoad={(state) => this.setState(state, this.refreshPortfolio.bind(this))}
+					/>
 
 					<div id="graph-wrapper">
 						<Graph stock={this.state.graph} />
