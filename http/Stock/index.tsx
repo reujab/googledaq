@@ -35,8 +35,8 @@ export default class Stock extends React.Component<Props, State> {
 		return (
 			<Card
 				className="stock"
-				interactive={!this.props.stock.loading}
-				elevation={1}
+				interactive={!this.props.stock.loading && !this.props.open}
+				elevation={this.props.open ? 3 : 1}
 				onClick={this.props.onClick}
 			>
 				{this.props.stock.loading && (
