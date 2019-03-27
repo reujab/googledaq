@@ -1,7 +1,7 @@
 // Workaround for uuid requiring crypto
-for (const key of Object.keys(global.require("crypto"))) {
+for (const key of Object.keys(global["require"]("crypto"))) {
 	if (!["DEFAULT_ENCODING", "createCredentials", "Credentials"].includes(key)) {
-		require("crypto")[key] = global.require("crypto")[key]
+		require("crypto")[key] = global["require"]("crypto")[key]
 	}
 }
 

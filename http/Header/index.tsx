@@ -2,8 +2,8 @@ import * as React from "react"
 import logo from "../../googledaq.png"
 import { ButtonGroup, Button, Card, IToaster, Toaster } from "@blueprintjs/core"
 
-const fs = global.require("fs")
-const { dialog } = global.require("electron").remote
+const fs = global["require"]("fs")
+const { dialog } = global["require"]("electron").remote
 
 interface Props {
 	gameID: string
