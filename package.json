@@ -12,7 +12,7 @@
     "pack:linux": "npm run prepack && electron-builder --linux",
     "pack:win": "npm run prepack && electron-builder --win"
   },
-  "author": "reujab",
+  "author": "reujab <reujab@gmail.com>",
   "license": "Unlicense",
   "dependencies": {
     "@blueprintjs/core": "^3.14.1",
