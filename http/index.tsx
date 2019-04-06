@@ -29,6 +29,7 @@ interface State {
 	graph: null | GraphedStock
 	portfolio: PortfolioStock[]
 	cache: GraphedStock[]
+	history: HistoryStock[]
 }
 
 // Metadata of a stock
@@ -48,6 +49,12 @@ export interface PortfolioStock {
 	loading: boolean
 }
 
+// Metadata of a sold stock in history
+export interface HistoryStock extends PortfolioStock {
+	id: number
+	graph: GraphedStock
+}
+
 export default class Index extends React.Component<any, State> {
 	constructor(props) {
 		super(props)
@@ -60,6 +67,7 @@ export default class Index extends React.Component<any, State> {
 				money: 100 * 100,
 				portfolio: [],
 				cache: [],
+				history: [],
 			},
 			JSON.parse(localStorage.indexState || "{}"),
 			{
@@ -163,6 +171,8 @@ export default class Index extends React.Component<any, State> {
 	}
 
 	sell(stock: PortfolioStock, shares: number) {
+		const graph = _.cloneDeep(this.getCachedGraph(stock))
+
 		if (shares === stock.shares) {
 			this.setState({
 				portfolio: this.state.portfolio.filter((val) => val !== stock),
@@ -183,10 +193,43 @@ export default class Index extends React.Component<any, State> {
 			return
 		}
 
+		// Adds trade to history
+		const lastSoldStock = _.last(this.state.history)
+		if (
+			lastSoldStock &&
+			lastSoldStock.name === stock.name &&
+			lastSoldStock.originalPrice === stock.originalPrice &&
+			lastSoldStock.graph.currentCost === graph.currentCost
+		) {
+			// Replaces last sold stock in history with updated number of shares
+			this.setState({
+				history: Object.assign([], this.state.history, {
+					[this.state.history.length - 1]: Object.assign({}, lastSoldStock, {
+						shares: lastSoldStock.shares + shares,
+						graph,
+					}),
+				})
+			})
+		} else if (stock.originalPrice !== graph.currentCost) {
+			// Adds new stock in history
+			// Doesn't add stock to history if the stock was sold for the same price it was bought
+			// at
+			this.setState({
+				history: this.state.history.concat([
+					Object.assign({}, stock, {
+						id: Date.now(),
+						loading: false,
+						shares,
+						graph,
+					})
+				]),
+			})
+		}
+
 		this.setState({
 			lastUpdate: Date.now(),
 
-			money: this.state.money + shares * this.getCachedGraph(stock).currentCost,
+			money: this.state.money + shares * graph.currentCost,
 		})
 	}
 
@@ -239,6 +282,7 @@ export default class Index extends React.Component<any, State> {
 								key={`${stock.originalPrice}-${stock.name}`}
 								stock={stock}
 								graph={this.getCachedGraph(stock)}
+								interactive
 								open={this.state.graph && this.state.graph.name === stock.name}
 								onClick={() => !stock.loading && this.updateGraph(stock.name)}
 								onSell={this.sell.bind(this, stock)}
@@ -250,6 +294,8 @@ export default class Index extends React.Component<any, State> {
 					<Header
 						gameID={this.state.gameID}
 						lastUpdate={this.state.lastUpdate}
+						history={this.state.history}
+
 						onLoad={(state) => this.setState(state, this.refreshPortfolio.bind(this))}
 					/>
 

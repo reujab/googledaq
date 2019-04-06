@@ -8,6 +8,7 @@ import { Money, Percent } from "../Utils"
 interface Props {
 	stock: PortfolioStock
 	graph: GraphedStock
+	interactive: boolean
 	open: boolean
 
 	onClick: () => void
@@ -35,7 +36,7 @@ export default class Stock extends React.Component<Props, State> {
 		return (
 			<Card
 				className="stock"
-				interactive={!this.props.stock.loading && !this.props.open}
+				interactive={!this.props.stock.loading && !this.props.open && this.props.interactive}
 				elevation={this.props.open ? 3 : 1}
 				onClick={this.props.onClick}
 			>

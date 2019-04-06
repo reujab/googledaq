@@ -1,6 +1,8 @@
 import * as React from "react"
+import History from "./History"
 import logo from "../../googledaq.png"
-import { ButtonGroup, Button, Card, IToaster, Toaster } from "@blueprintjs/core"
+import { ButtonGroup, Button, Card, IToaster, Popover, Toaster } from "@blueprintjs/core"
+import { HistoryStock } from ".."
 
 const fs = global["require"]("fs")
 const { dialog } = global["require"]("electron").remote
@@ -8,6 +10,7 @@ const { dialog } = global["require"]("electron").remote
 interface Props {
 	gameID: string
 	lastUpdate: number
+	history: HistoryStock[]
 
 	onLoad: (object) => void
 }
@@ -39,6 +42,13 @@ export default class Header extends React.Component<Props> {
 				<h1 className="bp3-heading">GoogleDAQ</h1>
 
 				<div style={{ flexGrow: 1 }} />
+
+				{(!!this.props.history.length && (
+					<Popover usePortal={false}>
+						<Button style={{ marginRight: 8 }} icon="history">History</Button>
+						<History history={this.props.history} />
+					</Popover>
+				))}
 
 				<ButtonGroup>
 					<Button
