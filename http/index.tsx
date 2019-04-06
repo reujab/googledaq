@@ -194,7 +194,7 @@ export default class Index extends React.Component<any, State> {
 		this.setState({
 			portfolio: this.state.portfolio.map((stock) => Object.assign(stock, {
 				loading: true,
-			}))
+			})),
 		})
 
 		for (const stock of this.state.portfolio) {
