@@ -33,3 +33,56 @@ You only start off with $100, so you won't be able to buy any of the big stocks,
 ## Downloading
 
 There are [releases](https://github.com/reujab/googledaq/releases) for Linux and Windows (macOS builds coming soon).
+
+## Project structure
+
+* [http/](http)
+	* [Graph/](http/Graph)
+		* [index.tsx](http/Graph/index.tsx)
+			* chart.js wrapper component
+	* [Header/](http/Header)
+		* [History/](http/Header/History)
+			* [index.sass](http/Header/History/index.sass)
+				* styles for history component
+			* [index.tsx](http/Header/History/index.tsx)
+				* history component
+		* [index.sass](http/Header/index.sass)
+			* styles for header
+		* [index.tsx](http/Header/index.tsx)
+			* header component
+	* [Introduction/](http/Introduction)
+		* [index.sass](http/Introduction/index.sass)
+			* styles for introduction
+		* [index.tsx](http/Introduction/index.tsx)
+			* introduction component
+	* [Open Sans/](http/Open%20Sans)
+		* contains Open Sans font files
+	* [Search/](http/Search)
+		* [index.tsx](http/Search/index.tsx)
+			* search and buy component
+	* [Stock/](http/Stock)
+		* [index.sass](http/Stock/index.sass)
+			* styles for stock component
+		* [index.tsx](http/Stock/index.tsx)
+			* stock component
+	* [Utils/](http/Utils)
+		* [index.tsx](http/Utils/index.tsx)
+			* renders money and percentages
+	* [index.html](http/index.html)
+		* entry html document
+	* [index.sass](http/index.sass)
+		* styles for root elements
+	* [index.tsx](http/index.tsx)
+		* root component
+	* [trends.ts](http/trends.ts)
+		* calculates stock price for search queries
+* [screenshots/](screenshots)
+	* contains screenshots for readme
+* [googledaq.ico](googledaq.ico)
+	* icon for Windows .exe files
+* [googledaq.png](googledaq.png)
+	* icon for header and linux .desktop files
+* [main.js](main.js)
+	* electron file
+* [unlicense](unlicense)
+	* public domain license
