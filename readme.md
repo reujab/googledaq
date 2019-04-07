@@ -55,7 +55,9 @@ There are [releases](https://github.com/reujab/googledaq/releases) for Linux and
 ```sh
 git clone https://github.com/reujab/googledaq
 cd googledaq
-npm run pack:linux # or npm run pack:win
+npm install
+npm run pack
+./packages/*.AppImage # or .\packages\*.exe
 ```
 
 ## Project structure

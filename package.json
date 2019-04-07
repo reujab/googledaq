@@ -7,6 +7,7 @@
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
     "watch": "parcel watch -d dist --public-url . -t electron --no-hmr http/index.html",
     "build": "rm -rf dist && parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
+    "pack": "npm run build && electron-builder --config.win.target nsis --config.linux.target appimage",
     "pack:win": "npm run build && electron-builder --win --config.win.target nsis",
     "pack:linux": "npm run build && electron-builder --linux --config.linux.target appimage",
     "pack:all": "rm -rf packages && npm run build && electron-builder --win --linux"
