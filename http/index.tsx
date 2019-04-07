@@ -13,6 +13,7 @@ import Header from "./Header"
 import ReactDOM from "react-dom"
 import Search from "./Search"
 import Stock from "./Stock"
+import Introduction from "./Introduction"
 import _ from "lodash"
 import uuid from "uuid/v4"
 import { Button, Card, Icon } from "@blueprintjs/core"
@@ -299,9 +300,13 @@ export default class Index extends React.Component<any, State> {
 						onLoad={(state) => this.setState(state, this.refreshPortfolio.bind(this))}
 					/>
 
-					<div id="graph-wrapper">
-						<Graph stock={this.state.graph} />
-					</div>
+					{this.state.graph ? (
+						<div id="graph-wrapper">
+							<Graph stock={this.state.graph} />
+						</div>
+					) : ((
+						<Introduction />
+					))}
 				</div>
 			</React.Fragment>
 		)
