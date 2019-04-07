@@ -14,9 +14,9 @@ export default class Graph extends React.Component<Props> {
 				labels: this.props.stock.dates,
 				datasets: [{
 					backgroundColor: "rgb(66, 133, 244)",
-					label: this.props.stock.name,
+					cubicInterpolationMode: "monotone",
 					data: this.props.stock.costs,
-					lineTension: 0.25,
+					label: this.props.stock.name,
 				}],
 			}} options={{
 				scales: {
