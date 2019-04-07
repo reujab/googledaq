@@ -6,11 +6,10 @@
   "scripts": {
     "start": "ELECTRON_DISABLE_SECURITY_WARNINGS=true electron .",
     "watch": "parcel watch -d dist --public-url . -t electron --no-hmr http/index.html",
-    "build": "parcel build -d dist --public-url . -t electron --bundle-node-modules http/index.html",
-    "prepack": "rm -rf dist && parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
-    "pack": "npm run prepack && electron-builder",
-    "pack:linux": "npm run prepack && electron-builder --linux",
-    "pack:win": "npm run prepack && electron-builder --win"
+    "build": "rm -rf dist && parcel build -d dist --public-url . -t electron --bundle-node-modules --no-source-maps http/index.html",
+    "pack:win": "npm run build && electron-builder --win --config.win.target dir",
+    "pack:linux": "npm run build && electron-builder --linux --config.linux.target dir",
+    "pack:all": "rm -rf packages && npm run build && electron-builder --win --linux"
   },
   "author": "reujab <reujab@gmail.com>",
   "license": "Unlicense",
@@ -58,11 +57,16 @@
     ],
     "linux": {
       "category": "Game",
-      "icon": "googledaq.png"
+      "icon": "googledaq.png",
+      "target": ["appimage", "deb", "pacman", "rpm", "snap", "tar.xz"]
     },
+    "nsis": {
+      "oneClick": false
+    },
+    "productName": "GoogleDAQ",
     "win": {
       "icon": "googledaq.ico",
-      "target": "portable"
+      "target": ["nsis", "portable", "zip"]
     }
   }
 }
