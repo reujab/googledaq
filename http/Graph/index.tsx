@@ -4,12 +4,12 @@ import { Line } from "react-chartjs-2"
 import { formatMoney } from "../Utils"
 
 interface Props {
-	stock: null | GraphedStock
+	stock: GraphedStock
 }
 
 export default class Graph extends React.Component<Props> {
 	render() {
-		return this.props.stock && (
+		return (
 			<Line data={{
 				labels: this.props.stock.dates,
 				datasets: [{
