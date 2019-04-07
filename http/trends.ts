@@ -18,10 +18,14 @@ export async function getGraph(term: string) {
 	const startTime = new Date()
 	startTime.setDate(startTime.getDate() - 7 * 4)
 
-	const data = JSON.parse(await trends.interestOverTime({
-		keyword: [term].concat(baseTerms),
-		startTime,
-	})).default.timelineData.map(toFrame)
+	// The first request typically fails
+	let data
+	await retry(async () => {
+		data = JSON.parse(await trends.interestOverTime({
+			keyword: [term].concat(baseTerms),
+			startTime,
+		})).default.timelineData.map(toFrame)
+	}, 3)
 
 	// For some reason, the above API call doesn't include the last couple days, so this API call
 	// fills in the gap by averaging the hour-by-hour data after the last day provided by the last
@@ -62,6 +66,18 @@ export async function getGraph(term: string) {
 		dates: data.map((frame) => moment(frame.date).utc().format("ddd MMM D")),
 		costs: data.map((frame) => frame.cost),
 		currentCost: (_.last(data) as Frame).cost,
+	}
+}
+
+async function retry(func: () => void, attempts: number) {
+	try {
+		return await func()
+	} catch (err) {
+		if (attempts === 1) {
+			throw err
+		}
+
+		return await retry(func, attempts - 1)
 	}
 }
 
