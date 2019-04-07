@@ -14,18 +14,34 @@ You only start off with $100, so you won't be able to buy any of the big stocks,
 <table>
 	<tr>
 		<td>
-			<img src="screenshots/april fools.png">
+			<img src="https://raw.githubusercontent.com/reujab/googledaq/master/screenshots/new%20zealand.png">
 		</td>
 		<td>
-			<img src="screenshots/bing.png">
+			<img src="https://raw.githubusercontent.com/reujab/googledaq/master/screenshots/bing.png">
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<img src="screenshots/borderlands.png">
+			The searches for "new zealand" peaked on March 15 due to the attack.
 		</td>
 		<td>
-			<img src="screenshots/new zealand.png">
+			The searches for "bing" peaked on April 1 as <a href="https://www.reddit.com/r/google/comments/b8bfqm/users_boosting_search_for_bing_on_april_fools_day/">an April Fools' joke</a>.
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<img src="https://raw.githubusercontent.com/reujab/googledaq/master/screenshots/borderlands.png">
+		</td>
+		<td>
+			<img src="https://raw.githubusercontent.com/reujab/googledaq/master/screenshots/april%20fools.png">
+		</td>
+	</tr>
+	<tr>
+		<td>
+			The searches for "borderlands 3" spiked on the announcement and release.
+		</td>
+		<td>
+			The searches for "april fools" peaked on April 1.
 		</td>
 	</tr>
 </table>
