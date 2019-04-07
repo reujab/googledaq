@@ -15,7 +15,7 @@ function initWindow() {
 	mainWindow = new BrowserWindow({
 		height: 900,
 		minHeight: 600,
-		minWidth: 800,
+		minWidth: 1200,
 		show: false,
 		width: 1200,
 		webPreferences: {

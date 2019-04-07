@@ -1,6 +1,7 @@
 import * as React from "react"
 import History from "./History"
 import logo from "../../googledaq.png"
+import moment from "moment"
 import { ButtonGroup, Button, Card, IToaster, Popover, Toaster } from "@blueprintjs/core"
 import { HistoryStock } from ".."
 
@@ -15,16 +16,37 @@ interface Props {
 	onLoad: (object) => void
 }
 
-export default class Header extends React.Component<Props> {
+interface State {
+	time: number
+}
+
+export default class Header extends React.Component<Props, State> {
 	toaster: IToaster
+	clockInterval: NodeJS.Timer
 
 	constructor(props) {
 		super(props)
+
+		this.state = {
+			time: Date.now(),
+		}
 
 		// Toasters cannot be created in React lifecycle methods.
 		setImmediate(() => this.toaster = Toaster.create({
 			position: "bottom",
 		}))
+	}
+
+	componentDidMount() {
+		this.clockInterval = setInterval(() => {
+			this.setState({
+				time: Date.now(),
+			})
+		}, 100)
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.clockInterval)
 	}
 
 	showError(message: string) {
@@ -40,6 +62,8 @@ export default class Header extends React.Component<Props> {
 			<Card className="header" elevation={3}>
 				<img draggable={false} src={logo} />
 				<h1 className="bp3-heading">GoogleDAQ</h1>
+
+				<span className="header-clock">{moment(this.state.time).utc().format("ddd MMM D h:mm:ss A")} UTC</span>
 
 				<div style={{ flexGrow: 1 }} />
 
