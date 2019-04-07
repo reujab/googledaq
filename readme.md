@@ -50,6 +50,14 @@ You only start off with $100, so you won't be able to buy any of the big stocks,
 
 There are [releases](https://github.com/reujab/googledaq/releases) for Linux and Windows (macOS builds coming soon).
 
+## Compiling from source
+
+```sh
+git clone https://github.com/reujab/googledaq
+cd googledaq
+npm run pack:linux # or npm run pack:win
+```
+
 ## Project structure
 
 * [http/](http)
