@@ -48,7 +48,7 @@ You only start off with $100, so you won't be able to buy any of the big stocks,
 
 ## Downloading
 
-There are [releases](https://github.com/reujab/googledaq/releases) for Linux and Windows (macOS builds coming soon).
+There are [releases](https://github.com/reujab/googledaq/releases) for Linux, macOS, and Windows.
 
 ## Compiling from source
 
