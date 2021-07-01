@@ -17,7 +17,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.15.0",
     "@blueprintjs/icons": "^3.7.0",
-    "@material-ui/core": "^3.9.3",
+    "@material-ui/core": "^4.11.4",
     "chart.js": "^2.8.0",
     "google-trends-api": "^4.9.0",
     "lodash": "^4.17.11",
@@ -36,10 +36,10 @@
     "@types/react": "^16.8.12",
     "@types/react-chartjs-2": "^2.5.7",
     "@types/react-dom": "^16.8.3",
-    "electron": "^4.1.4",
+    "electron": "^13.1.4",
     "electron-builder": "^20.39.0",
     "electron-react-devtools": "^0.5.3",
-    "parcel-bundler": "^1.12.3",
+    "parcel-bundler": "^1.9.4",
     "sass": "^1.17.4",
     "typescript": "^3.4.2"
   },
@@ -59,7 +59,14 @@
     "linux": {
       "category": "Game",
       "icon": "googledaq.png",
-      "target": ["appimage", "deb", "pacman", "rpm", "snap", "tar.xz"]
+      "target": [
+        "appimage",
+        "deb",
+        "pacman",
+        "rpm",
+        "snap",
+        "tar.xz"
+      ]
     },
     "nsis": {
       "oneClick": false
@@ -67,7 +74,11 @@
     "productName": "GoogleDAQ",
     "win": {
       "icon": "googledaq.ico",
-      "target": ["nsis", "portable", "zip"]
+      "target": [
+        "nsis",
+        "portable",
+        "zip"
+      ]
     }
   }
 }
